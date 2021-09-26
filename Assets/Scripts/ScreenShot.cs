@@ -13,7 +13,7 @@ public class ScreenShot: MonoBehaviour
     {
         cam = GetComponent<Camera>();
 
-        screenShotPath = Application.dataPath + "/ScreenShoots";
+        screenShotPath = Application.dataPath + "/ScreenShots";
     }
     
     public void TakeScreenShot()
