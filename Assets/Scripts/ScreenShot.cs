@@ -5,7 +5,6 @@ using TMPro;
 
 public class ScreenShot: MonoBehaviour
 {
-    public TextMeshProUGUI text;
     private Camera cam;
     private string screenShotPath;
 
@@ -30,7 +29,6 @@ public class ScreenShot: MonoBehaviour
         RenderTexture.active = null; // JC: added to avoid errors
         
         Destroy(rt);
-        
 
         if(!Directory.Exists(screenShotPath))
         {
@@ -38,7 +36,7 @@ public class ScreenShot: MonoBehaviour
         }
 
         byte[] bytes = screenShot.EncodeToPNG();
-        string fileName = screenShotPath + "/art-" + System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".png";
+        string fileName = screenShotPath + "/art_" + System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".png";
         File.WriteAllBytes(fileName, bytes);
     }
 }
