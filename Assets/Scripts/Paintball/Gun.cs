@@ -11,8 +11,8 @@ public class Gun : MonoBehaviour
     private bool isSingleShot;
     
     private float fireCooldown, currentCooldown;
-    private const float SLOW_FIRE_COOLDOWN = 1;
-    private const float FAST_FIRE_COOLDOWN = .1f;
+    private const float SLOW_FIRE_COOLDOWN = .5f;
+    private const float FAST_FIRE_COOLDOWN = .01f;
 
     RaycastHit hit;
 
@@ -24,9 +24,9 @@ public class Gun : MonoBehaviour
 
     void Update()
     {
-        if(gunColorRenderer.material.color != Ball.splashColor)
+        if(gunColorRenderer.material.color != ColorSettings.splashColor)
         {
-            gunColorRenderer.material.color = Ball.splashColor;
+            gunColorRenderer.material.color = ColorSettings.splashColor;
         }
 
         if(Input.GetKeyDown(KeyCode.Q))
@@ -42,6 +42,11 @@ public class Gun : MonoBehaviour
         {
             Vector3 pos = new Vector3(hit.point.x, hit.point.y, -.01f);
             transform.LookAt(pos);
+
+            if(UIHandler.isUIActive)
+            {
+                return;
+            }
 
             if(isSingleShot)
             {

@@ -14,16 +14,15 @@ public class Board: MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(rend.material.color != ColorSettings.boardColor)
         {
-            ClearBoard();
+            rend.material.color = ColorSettings.boardColor;
         }
     }
 
     public static void AddSplash(GameObject splash)
     {
         splashes.Add(splash);
-        //rend.material.color = GetRandomColor();
     }
 
     public static void ClearBoard()
@@ -34,15 +33,5 @@ public class Board: MonoBehaviour
             Destroy(splashes[0]);
             splashes.RemoveAt(0);
         }
-    }
-
-    public static Color GetRandomColor()
-    {
-        System.Random random = new System.Random();
-        float r = (float)(random.NextDouble() * (1 - 0) + 0);
-        float g = (float)(random.NextDouble() * (1 - 0) + 0);
-        float b = (float)(random.NextDouble() * (1 - 0) + 0);
-
-        return new Color(r, g, b);
     }
 }
