@@ -6,11 +6,12 @@ public class Gun : MonoBehaviour
     public GameObject ballPrefab;
     public Renderer gunColorRenderer;
     public Transform bulletSpawn;
+    public AudioClip fireSound;
 
     private int currentFireModeNo;
     private bool isSingleShot;
     
-    private float fireCooldown, currentCooldown;
+    public float fireCooldown, currentCooldown;
     private const float SLOW_FIRE_COOLDOWN = .5f;
     private const float FAST_FIRE_COOLDOWN = .01f;
 
@@ -38,15 +39,15 @@ public class Gun : MonoBehaviour
             SetFireMode(true);
         }
 
+        if(UIHandler.isUIActive)
+        {
+            return;
+        }
+
         if(Physics.Raycast(persCam.ScreenPointToRay(Input.mousePosition), out hit))
         {
             Vector3 pos = new Vector3(hit.point.x, hit.point.y, -.01f);
             transform.LookAt(pos);
-
-            if(UIHandler.isUIActive)
-            {
-                return;
-            }
 
             if(isSingleShot)
             {
@@ -62,19 +63,36 @@ public class Gun : MonoBehaviour
                     currentCooldown -= Time.deltaTime;
                 }
 
-                if(Input.GetMouseButton(0) && currentCooldown <= 0)
+                if(Input.GetMouseButton(0))
                 {
                     Fire(pos);
-                    currentCooldown = fireCooldown;
+                    return;
                 }
             }
         }
+
+        MainSoundController.instance.StopLoop();
     }
 
     void Fire(Vector3 pos)
     {
-        GameObject ball = Instantiate(ballPrefab, bulletSpawn.position, Quaternion.identity);
-        ball.GetComponent<Ball>().SetTargetPosition(pos);
+        if(currentCooldown <= 0 || isSingleShot)
+        {
+            GameObject ball = Instantiate(ballPrefab, bulletSpawn.position, Quaternion.identity);
+            ball.GetComponent<Ball>().SetTargetPosition(pos);
+
+            currentCooldown = fireCooldown;
+
+            if(fireCooldown == SLOW_FIRE_COOLDOWN)
+            {
+                MainSoundController.instance.PlayImmediately(fireSound);
+            }
+            else
+            {
+                MainSoundController.instance.PlayLoop(fireSound);
+                MainSoundController.instance.ContinueLoop();
+            }
+        }
     }
 
     public void SetFireMode(bool isIncreasing)

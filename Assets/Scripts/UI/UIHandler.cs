@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIHandler : MonoBehaviour
 {
@@ -9,7 +10,8 @@ public class UIHandler : MonoBehaviour
         private set;
     }
 
-    public GameObject mainUIObj;
+    public GameObject mainUIObj, gunModelObj;
+    public AudioClip buttonClickSound;
 
     void Update()
     {
@@ -17,6 +19,25 @@ public class UIHandler : MonoBehaviour
         {
             isUIActive = !isUIActive;
             mainUIObj.SetActive(isUIActive);
+        }
+    }
+
+    public void PlayButtonSound()
+    {
+        MainSoundController.instance.Play(buttonClickSound);
+    }
+
+    public void SetGunVisibility(TextMeshProUGUI text)
+    {
+        gunModelObj.SetActive(!gunModelObj.activeSelf);
+
+        if(gunModelObj.activeSelf)
+        {
+            text.SetText("Hide Gun");
+        }
+        else
+        {
+            text.SetText("Unhide Gun");
         }
     }
 }
