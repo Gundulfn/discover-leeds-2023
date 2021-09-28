@@ -13,7 +13,7 @@ public class Gun : MonoBehaviour
     
     public float fireCooldown, currentCooldown;
     private const float SLOW_FIRE_COOLDOWN = .5f;
-    private const float FAST_FIRE_COOLDOWN = .01f;
+    private const float FAST_FIRE_COOLDOWN = .1f;
 
     RaycastHit hit;
 

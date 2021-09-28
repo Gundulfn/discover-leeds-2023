@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class Ball : MonoBehaviour
 {
@@ -24,8 +25,15 @@ public class Ball : MonoBehaviour
     {
         GameObject splash = Instantiate(splashPrefab, targetPos, splashPrefab.transform.rotation);
         splash.GetComponent<Renderer>().material.color = ColorSettings.splashColor;
+        splash.transform.rotation = Quaternion.Euler(GetRandomRotation(), splash.transform.rotation.eulerAngles.y, 
+                                                                          splash.transform.rotation.eulerAngles.z);
         Board.AddSplash(splash);
 
         Destroy(gameObject);
+    }
+
+    private float GetRandomRotation()
+    {
+        return UnityEngine.Random.Range(0, 360);
     }
 }
