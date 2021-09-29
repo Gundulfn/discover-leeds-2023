@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class Gun : MonoBehaviour
 {
@@ -7,11 +8,11 @@ public class Gun : MonoBehaviour
     public Renderer gunColorRenderer;
     public Transform bulletSpawn;
     public AudioClip fireSound;
-
-    private int currentFireModeNo;
-    private bool isSingleShot;
     
-    public float fireCooldown, currentCooldown;
+    private FireMode fireMode;
+    private bool isSingleShot;
+
+    private float fireCooldown, currentCooldown;
     private const float SLOW_FIRE_COOLDOWN = .5f;
     private const float FAST_FIRE_COOLDOWN = .1f;
 
@@ -19,8 +20,7 @@ public class Gun : MonoBehaviour
 
     void Start()
     {
-        currentFireModeNo = 1;
-        fireCooldown = SLOW_FIRE_COOLDOWN;
+        fireMode = GetComponent<FireMode>();
     }
 
     void Update()
@@ -30,19 +30,12 @@ public class Gun : MonoBehaviour
             gunColorRenderer.material.color = ColorSettings.splashColor;
         }
 
-        if(Input.GetKeyDown(KeyCode.Q))
-        {
-            SetFireMode(false);
-        }
-        else if(Input.GetKeyDown(KeyCode.E))
-        {
-            SetFireMode(true);
-        }
-
         if(UIHandler.isUIActive)
         {
             return;
         }
+
+        isSingleShot = fireMode.currentFireModeNo == FireModeSettings.SINGLE_SHOT_NO;
 
         if(Physics.Raycast(persCam.ScreenPointToRay(Input.mousePosition), out hit))
         {
@@ -58,6 +51,15 @@ public class Gun : MonoBehaviour
             }
             else
             {
+                if(fireMode.currentFireModeNo == FireModeSettings.SLOW_SHOT_NO)
+                {
+                    fireCooldown = SLOW_FIRE_COOLDOWN;
+                }
+                else
+                {
+                    fireCooldown = FAST_FIRE_COOLDOWN;
+                }
+
                 if(currentCooldown > 0)
                 {
                     currentCooldown -= Time.deltaTime;
@@ -92,34 +94,6 @@ public class Gun : MonoBehaviour
                 MainSoundController.instance.PlayLoop(fireSound);
                 MainSoundController.instance.ContinueLoop();
             }
-        }
-    }
-
-    public void SetFireMode(bool isIncreasing)
-    {
-        currentFireModeNo += (isIncreasing? 1: -1);
-
-        if(currentFireModeNo < 0)
-        {
-            currentFireModeNo += 3;
-        }
-
-        currentFireModeNo %= 3;
-        currentCooldown = 0;
-
-        if(currentFireModeNo == 0)
-        {
-            isSingleShot = true;
-        }
-        else if(currentFireModeNo == 1)
-        {
-            isSingleShot = false;  
-            fireCooldown = SLOW_FIRE_COOLDOWN;
-        }
-        else
-        {
-            fireCooldown = FAST_FIRE_COOLDOWN;
-            isSingleShot = false;  
         }
     }
 }

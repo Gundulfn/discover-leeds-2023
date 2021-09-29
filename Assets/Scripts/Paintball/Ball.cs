@@ -24,6 +24,7 @@ public class Ball : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         GameObject splash = Instantiate(splashPrefab, targetPos, splashPrefab.transform.rotation);
+        
         splash.GetComponent<Renderer>().material.color = ColorSettings.splashColor;
         splash.transform.rotation = Quaternion.Euler(GetRandomRotation(), splash.transform.rotation.eulerAngles.y, 
                                                                           splash.transform.rotation.eulerAngles.z);
