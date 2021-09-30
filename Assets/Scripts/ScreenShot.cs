@@ -1,10 +1,10 @@
 using UnityEngine;
 using System;
 using System.IO;
-using TMPro;
 
 public class ScreenShot: MonoBehaviour
 {
+    public GameObject firstScreenShotTextObj;
     private Camera cam;
     private string screenShotPath;
 
@@ -17,6 +17,11 @@ public class ScreenShot: MonoBehaviour
     
     public void TakeScreenShot()
     {
+        if(firstScreenShotTextObj)
+        {
+            Destroy(firstScreenShotTextObj);
+        }
+
         RenderTexture rt = new RenderTexture(Screen.width, Screen.height, 24);
         Texture2D screenShot = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
         
