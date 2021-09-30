@@ -4,21 +4,42 @@ using TMPro;
 
 public class UIHandler : MonoBehaviour
 {
-    public static bool isUIActive
+    private static bool isUIActive = true;
+    public static bool IsUIActive
     {
-        get;
-        private set;
+        get{ return isUIActive; }
+        private set{ isUIActive = value; }
     }
 
-    public GameObject mainUIObj, gunModelObj;
+    private static bool isCreditsUIActive;
+    public static bool IsCreditsUIActive
+    {
+        get{ return isCreditsUIActive; }
+        private set{ isCreditsUIActive = value; } 
+    }
+
+    public GameObject mainUIObj, entranceUIObj, creditsUIObj;
     public AudioClip buttonClickSound;
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(Input.GetKeyDown(KeyCode.Space) && entranceUIObj.activeSelf)
         {
-            isUIActive = !isUIActive;
-            mainUIObj.SetActive(isUIActive);
+            entranceUIObj.SetActive(false);
+            isUIActive = false;
+        }
+
+        if(Input.GetKeyDown(KeyCode.Escape) && !entranceUIObj.activeSelf)
+        {
+            if(creditsUIObj.activeSelf)
+            {
+                SetCreditsUIActivity();
+            }
+            else
+            {
+                isUIActive = !isUIActive;
+                mainUIObj.SetActive(isUIActive);
+            }
         }
     }
 
@@ -27,17 +48,10 @@ public class UIHandler : MonoBehaviour
         MainSoundController.instance.Play(buttonClickSound);
     }
 
-    public void SetGunVisibility(TextMeshProUGUI text)
+    public void SetCreditsUIActivity()
     {
-        gunModelObj.SetActive(!gunModelObj.activeSelf);
-
-        if(gunModelObj.activeSelf)
-        {
-            text.SetText("Hide Gun");
-        }
-        else
-        {
-            text.SetText("Unhide Gun");
-        }
+        isCreditsUIActive = !isCreditsUIActive;
+        creditsUIObj.SetActive(isCreditsUIActive);
+        mainUIObj.SetActive(!isCreditsUIActive);
     }
 }

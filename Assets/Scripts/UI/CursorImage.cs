@@ -9,7 +9,7 @@ public class CursorImage: MonoBehaviour
  
     void Update()
     {
-        if(!UIHandler.isUIActive)
+        if(!UIHandler.IsUIActive)
         {
             Cursor.SetCursor(crossHairTexture, hotSpot, cursorMode);
         }
